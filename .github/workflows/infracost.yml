@@ -32,9 +32,10 @@ jobs:
       uses: infracost/actions/setup@v2
       with:
         api-key: ${{ secrets.INFRACOST_API_KEY }}
-    - name: Generate Infracost cost estimate baseline
+    - name: Generate Infracost cost estimate baseline}}
       run: |
         cd infrastructure
+        pulumi login --local
         pulumi preview --show-sames -j > /tmp/preview-existing.json
         ./bin/infracost breakdown --path /tmp/preview-existing.json \
                             --format=json \
@@ -47,6 +48,7 @@ jobs:
     - name: Generate Infracost diff
       run: |
         cd infrastructure
+        pulumi login --local
         pulumi preview --show-sames -j > /tmp/preview-new.json
         infracost diff --path=/tmp/preview-new.json \
                       --format=json \
