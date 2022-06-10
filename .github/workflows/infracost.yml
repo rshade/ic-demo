@@ -23,6 +23,8 @@ jobs:
         aws-region: us-east-2 # region doesn't matter for the cmd, just needs to be set
     - name: Install Pulumi CLI
       uses: pulumi/action-install-pulumi-cli@v2
+      with:
+        pulumi-config-passprhase: 'infracost'
     - name: Setup Node
       uses: actions/setup-node@v2
       with:
@@ -33,8 +35,6 @@ jobs:
       with:
         api-key: ${{ secrets.INFRACOST_API_KEY }}
     - name: Generate Infracost cost estimate baseline
-      with:
-        pulumi-config-passprhase: 'infracost'
       run: |
         cd infrastructure
         echo $PWD
