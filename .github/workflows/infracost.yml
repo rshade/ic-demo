@@ -35,7 +35,9 @@ jobs:
     - name: Generate Infracost cost estimate baseline}}
       run: |
         cd infrastructure
+        pwd
         pulumi login --local
+        pulumi stack init dev
         pulumi stack select dev
         pulumi preview --show-sames -j > /tmp/preview-existing.json
         ./bin/infracost breakdown --path /tmp/preview-existing.json \
