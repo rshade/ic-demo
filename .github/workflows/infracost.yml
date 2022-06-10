@@ -30,40 +30,33 @@ jobs:
         registry-url: https://registry.npmjs.org
     - name: Setup Infracost
       uses: infracost/actions/setup@v2
-      # See https://github.com/infracost/actions/tree/master/setup for other inputs
-      # If you can't use this action, see Docker images in https://infracost.io/cicd
       with:
         api-key: ${{ secrets.INFRACOST_API_KEY }}
     - name: Generate Infracost cost estimate baseline
       run: |
-        ./bin/infracost breakdown --path /tmp/preview.json --config-file=${TF_ROOT}/infracost.yml \
+        cd infrastructure
+        pulumi preview --show-sames -j > /tmp/preview-existing.json
+        ./bin/infracost breakdown --path /tmp/preview-existing.json \
                             --format=json \
                             --out-file=/tmp/infracost-base.json
       with:
         api-key: ${{ secrets.INFRACOST_API_KEY }
                 # Checkout the current PR branch so we can create a diff.
-      - name: Checkout PR branch
-        uses: actions/checkout@v2
+    - name: Checkout PR branch
+      uses: actions/checkout@v2
 
-      # Generate an Infracost diff and save it to a JSON file.
-      - name: Generate Infracost diff
-        run: |
-          infracost diff --path=${TF_ROOT} \
-                        --format=json \
-                        --compare-to=/tmp/infracost-base.json \
-                        --out-file=/tmp/infracost.json
-
-      # Posts a comment to the PR using the 'update' behavior.
-      # This creates a single comment and updates it. The "quietest" option.
-      # The other valid behaviors are:
-      #   delete-and-new - Delete previous comments and create a new one.
-      #   hide-and-new - Minimize previous comments and create a new one.
-      #   new - Create a new cost estimate comment on every push.
-      # See https://www.infracost.io/docs/features/cli_commands/#comment-on-pull-requests for other options.
-      - name: Post Infracost comment
-        run: |
-            infracost comment github --path=/tmp/infracost.json \
-                                    --repo=$GITHUB_REPOSITORY \
-                                    --github-token=${{github.token}} \
-                                    --pull-request=${{github.event.pull_request.number}} \
-                                    --behavior=update
+    # Generate an Infracost diff and save it to a JSON file.
+    - name: Generate Infracost diff
+      run: |
+        cd infrastructure
+        pulumi preview --show-sames -j > /tmp/preview-new.json
+        infracost diff --path=/tmp/preview-new.json \
+                      --format=json \
+                      --compare-to=/tmp/infracost-base.json \
+                      --out-file=/tmp/infracost.json
+      run: |
+          infracost comment github --path=/tmp/infracost.json \
+                                  --repo=$GITHUB_REPOSITORY \
+                                  --github-token=${{github.token}} \
+                                  --pull-request=${{github.event.pull_request.number}} \
+                                  --behavior=update
