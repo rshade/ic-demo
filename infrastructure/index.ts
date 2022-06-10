@@ -6,7 +6,7 @@ const namePrefix = 'example'
 
 const ebsVolume = new aws.ebs.Volume(`${namePrefix}-ebs-volume`, {
     availabilityZone: "us-west-2a",
-    size: 40,
+    size: 60,
     tags: {
         Name: "HelloWorld",
     },
@@ -14,7 +14,7 @@ const ebsVolume = new aws.ebs.Volume(`${namePrefix}-ebs-volume`, {
 
 const ebsVolume1 = new aws.ebs.Volume(`${namePrefix}-ebs-volume-1`, {
     availabilityZone: "us-west-2a",
-    size: 40,
+    size: 80,
     tags: {
         Name: "HelloWorld",
     },
@@ -41,7 +41,7 @@ const eip = new aws.ec2.Eip(`${namePrefix}-elastic-ip`, {
 
 const web = new aws.ec2.Instance(`${namePrefix}-ec2-instance`, {
     ami: ubuntu.then(ubuntu => ubuntu.id),
-    instanceType: "t3.micro",
+    instanceType: "t3.large",
     tags: {
         Name: "HelloWorld",
     },
