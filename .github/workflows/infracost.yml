@@ -14,7 +14,7 @@ jobs:
     - name: Checkout source code so we can install the action locally
       uses: actions/checkout@v2
       with:
-      ref: '${{ github.event.pull_request.base.ref }}'
+      ref: ${{ github.event.pull_request.base.ref }}
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
