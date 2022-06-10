@@ -36,6 +36,7 @@ jobs:
       run: |
         cd infrastructure
         pulumi login --local
+        pulumi stack select dev
         pulumi preview --show-sames -j > /tmp/preview-existing.json
         ./bin/infracost breakdown --path /tmp/preview-existing.json \
                             --format=json \
@@ -49,6 +50,7 @@ jobs:
       run: |
         cd infrastructure
         pulumi login --local
+        pulumi stack select dev
         pulumi preview --show-sames -j > /tmp/preview-new.json
         infracost diff --path=/tmp/preview-new.json \
                       --format=json \
