@@ -39,9 +39,7 @@ jobs:
         ./bin/infracost breakdown --path /tmp/preview-existing.json \
                             --format=json \
                             --out-file=/tmp/infracost-base.json
-      with:
-        api-key: ${{ secrets.INFRACOST_API_KEY }
-                # Checkout the current PR branch so we can create a diff.
+    # Checkout the current PR branch so we can create a diff.
     - name: Checkout PR branch
       uses: actions/checkout@v2
 
