@@ -35,6 +35,10 @@ jobs:
       uses: infracost/actions/setup@v2
       with:
         api-key: ${{ secrets.INFRACOST_API_KEY }}
+    - name: Run NPM Install
+      working-directory: infrastructure
+      run: |
+        npm install
     - name: Pulumi Preview
       uses: pulumi/actions@v3
       with:
