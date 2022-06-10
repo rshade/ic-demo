@@ -60,8 +60,6 @@ jobs:
         cd infrastructure
         export PULUMI_CONFIG_PASSPHRASE='infracost'
         pulumi login --local
-        pulumi stack init dev
-        pulumi stack select dev
         pulumi preview --show-sames
         echo "pulumi preview json"
         pulumi preview --show-sames -j > /tmp/preview-new.json
