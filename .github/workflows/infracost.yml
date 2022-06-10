@@ -47,7 +47,7 @@ jobs:
         echo "pulumi preview json"
         pulumi preview --show-sames -j > /tmp/preview-existing.json
         echo "infracost"
-        ./bin/infracost breakdown --path /tmp/preview-existing.json \
+        ../bin/infracost breakdown --path /tmp/preview-existing.json \
                             --format=json \
                             --out-file=/tmp/infracost-base.json
     # Checkout the current PR branch so we can create a diff.
@@ -62,13 +62,13 @@ jobs:
         pulumi login --local
         pulumi stack select dev
         pulumi preview --show-sames -j > /tmp/preview-new.json
-        infracost diff --path=/tmp/preview-new.json \
+        ../bin/infracost diff --path=/tmp/preview-new.json \
                       --format=json \
                       --compare-to=/tmp/infracost-base.json \
                       --out-file=/tmp/infracost.json
     - name: Post Infracost commen
       run: |
-          infracost comment github --path=/tmp/infracost.json \
+          ../bin/infracost comment github --path=/tmp/infracost.json \
                                   --repo=$GITHUB_REPOSITORY \
                                   --github-token=${{github.token}} \
                                   --pull-request=${{github.event.pull_request.number}} \
