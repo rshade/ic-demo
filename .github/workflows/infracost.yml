@@ -37,14 +37,14 @@ jobs:
         api-key: ${{ secrets.INFRACOST_API_KEY }}
     - name: Pulumi Preview
       uses: pulumi/actions@v3
-        with:
-          command: preview
-          stack-name: dev
-          comment-on-pr: true
-          github-token: ${{github.token}}
-          work-dir: infrastructure
-          cloud-url: --local
-          upsert: true
+      with:
+        command: preview
+        stack-name: dev
+        comment-on-pr: true
+        github-token: ${{github.token}}
+        work-dir: infrastructure
+        cloud-url: --local
+        upsert: true
       env:
         PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
     - name: Generate Infracost cost estimate baseline
