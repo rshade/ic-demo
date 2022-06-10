@@ -60,13 +60,17 @@ jobs:
         cd infrastructure
         export PULUMI_CONFIG_PASSPHRASE='infracost'
         pulumi login --local
+        pulumi stack init dev
         pulumi stack select dev
+        pulumi preview --show-sames
+        echo "pulumi preview json"
         pulumi preview --show-sames -j > /tmp/preview-new.json
+        echo "infracost"
         ../bin/infracost diff --path=/tmp/preview-new.json \
                       --format=json \
                       --compare-to=/tmp/infracost-base.json \
                       --out-file=/tmp/infracost.json
-    - name: Post Infracost commen
+    - name: Post Infracost comment
       run: |
           ../bin/infracost comment github --path=/tmp/infracost.json \
                                   --repo=$GITHUB_REPOSITORY \
