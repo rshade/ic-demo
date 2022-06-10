@@ -33,14 +33,18 @@ jobs:
       with:
         api-key: ${{ secrets.INFRACOST_API_KEY }}
     - name: Generate Infracost cost estimate baseline
+      with:
+        pulumi-config-passprhase: 'infracost'
       run: |
         cd infrastructure
-        pwd
-        export PULUMI_CONFIG_PASSPHRASE='infracost'
+        echo $PWD
         pulumi login --local
         pulumi stack init dev
         pulumi stack select dev
+        pulumi preview --show-sames
+        echo "pulumi preview json"
         pulumi preview --show-sames -j > /tmp/preview-existing.json
+        echo "infracost"
         ./bin/infracost breakdown --path /tmp/preview-existing.json \
                             --format=json \
                             --out-file=/tmp/infracost-base.json
