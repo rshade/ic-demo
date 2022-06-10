@@ -7,7 +7,7 @@ on:
     branches:
       - main
 env:
-  PULUMI_CONFIG_PASSPHRASE='infracost'
+  PULUMI_CONFIG_PASSPHRASE: 'infracost'
 
 jobs:
   check:
