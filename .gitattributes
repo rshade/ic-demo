@@ -1,2 +1,1 @@
-bin/infracost filter=lfs diff=lfs merge=lfs -binary
 help filter=lfs diff=lfs merge=lfs -text
