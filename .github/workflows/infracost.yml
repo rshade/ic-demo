@@ -64,10 +64,12 @@ jobs:
         echo "pulumi preview json"
         pulumi preview --show-sames -j > /tmp/preview-existing.json
         echo "infracost"
+        ../bin/infracost configure set enable_dashboard true
         ../bin/infracost breakdown --path /tmp/preview-existing.json \
                             --format=json \
                             --out-file=/tmp/infracost-base.json
         echo "::set-output name=totalMonthlyCost::$(jq '(.totalMonthlyCost // 0) | tonumber' < /tmp/infracost-base.json)"
+        echo "::set-output name=shareUrl::$(jq '.shareUrl' < /tmp/infracost-base.json)"
     - name: Create Awesome Badge
       uses: schneegans/dynamic-badges-action@v1.2.0
       with:
