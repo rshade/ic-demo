@@ -52,6 +52,7 @@ jobs:
       env:
         PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
     - name: Generate Infracost cost estimate baseline
+      id: infracost-commands
       run: |
         cd infrastructure
         echo $PWD
@@ -66,6 +67,16 @@ jobs:
         ../bin/infracost breakdown --path /tmp/preview-existing.json \
                             --format=json \
                             --out-file=/tmp/infracost-base.json
+        echo "::set-output name=totalMonthlyCost::$(jq '$(.totalMonthlyCost // 0) | tonumber' /tmp/infracost.json)"
+    - name: Create Awesome Badge
+      uses: schneegans/dynamic-badges-action@v1.2.0
+      with:
+        auth: ${{ secrets.GIST_SECRET }}
+        gistID: ac7574d29a44bd14994f60dd3e954247
+        filename: infracost-badge.json
+        label: Infracost Monthly Cost
+        message: ${{ steps.infracost-commands.outputs.totalMonthlyCost }}
+        color: blue
     # Checkout the current PR branch so we can create a diff.
     - name: Checkout PR branch
       uses: actions/checkout@v2
