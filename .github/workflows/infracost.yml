@@ -67,7 +67,7 @@ jobs:
         ../bin/infracost breakdown --path /tmp/preview-existing.json \
                             --format=json \
                             --out-file=/tmp/infracost-base.json
-        echo "::set-output name=totalMonthlyCost::$(jq '$(.totalMonthlyCost // 0) | tonumber' /tmp/infracost-base.json)"
+        echo "::set-output name=totalMonthlyCost::$(jq '(.totalMonthlyCost // 0) | tonumber' < /tmp/infracost-base.json)"
     - name: Create Awesome Badge
       uses: schneegans/dynamic-badges-action@v1.2.0
       with:
